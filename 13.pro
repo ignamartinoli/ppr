@@ -65,9 +65,7 @@ trabajadores_con_viaticos(Legajo, Nombre, Apellido, Localidad, Area) :-
 salarios(Legajo, Salario) :-
   trabajadores_y_su_salario(Legajo, SalarioBasico),
 
-  (trabajador(Legajo, _, _, _, _, contratado(_, _, _)),
+  ((trabajador(Legajo, _, _, _, _, contratado(_, _, _))
+  ; (trabajadores_que_no_son_de_cordoba(Legajo, _, _, _, _))),
   Salario is SalarioBasico)
-  ; (trabajador(Legajo, _, _, domicilio(_, _, CodigoLocalidad), _, efectivo(_, _, _)),
-    ((localidad(CodigoLocalidad, 'Cordoba'),
-      Salario is SalarioBasico));
-    Salario is SalarioBasico + 250).
+  ; Salario is SalarioBasico + 250.
