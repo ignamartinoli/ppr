@@ -58,14 +58,20 @@ trabajadores_y_su_salario(Legajo, Salario) :-
 % Legajo, nombre, apellido, descripción del área y descripción de la localidad de aquellos empleados a los que les corresponde viáticos.
 trabajadores_con_viaticos(Legajo, Nombre, Apellido, Localidad, Area) :-
   trabajadores_que_no_son_de_cordoba(Legajo, _, _, _, _),
-  trabajadores(Legajo, Nombre, Apellido, domicio(_, _, CodigoLocalidad), CodigoArea, _),
-  localidad(CodigoLocalidad, Localidad)
+  trabajador(Legajo, Nombre, Apellido, domicio(_, _, CodigoLocalidad), CodigoArea, _),
+  localidad(CodigoLocalidad, Localidad),
   area(CodigoArea, Area).
 
 salarios(Legajo, Salario) :-
   trabajadores_y_su_salario(Legajo, SalarioBasico),
-
   ((trabajador(Legajo, _, _, _, _, contratado(_, _, _))
   ; (trabajadores_que_no_son_de_cordoba(Legajo, _, _, _, _))),
   Salario is SalarioBasico)
   ; Salario is SalarioBasico + 250.
+
+salario_inferior_a(Valor, Legajo, Apellido, Nombre, Area, Localidad) :-
+  salarios(Legajo, Salario),
+  Salario < Valor,
+  trabajador(Legajo, Nombre, Apellido, domicilio(_, _, CodigoLocalidad), CodigoArea, _),
+  localidad(CodigoLocalidad, Localidad),
+  area(CodigoArea, Area).
