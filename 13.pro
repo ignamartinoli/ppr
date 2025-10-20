@@ -35,7 +35,7 @@ existen_trabajadores_de_calamuchita_o_area_1 :-
   !.
 
 % Legajo, apellido y nombre, calle y altura de aquellos empleados cuyo domicilio NO esté situado en Córdoba.t
-trabajores_que_no_son_de_cordoba(Legajo, Apellido, Nombre, Calle, Altura) :-
+trabajadores_que_no_son_de_cordoba(Legajo, Apellido, Nombre, Calle, Altura) :-
   trabajador(Legajo, Nombre, Apellido, domicilio(Calle, Altura, Localidad), _, _),
   localidad(Localidad, NombreLocalidad),
   NombreLocalidad \= 'Cordoba'.
@@ -56,7 +56,18 @@ trabajadores_y_su_salario(Legajo, Salario) :-
     Salario is (Basico + (Basico * Antiguedad * Coeficiente / 100))).
 
 % Legajo, nombre, apellido, descripción del área y descripción de la localidad de aquellos empleados a los que les corresponde viáticos.
-trabajadores_con_viaticos(Legajo, Nombre, Apellido, Area) :-
-  trabajores_que_no_son_de_cordoba(Legajo, _, _, _, _),
-  trabajores(Legajo, Nombre, Apellido, _, CodigoArea, _),
+trabajadores_con_viaticos(Legajo, Nombre, Apellido, Localidad, Area) :-
+  trabajadores_que_no_son_de_cordoba(Legajo, _, _, _, _),
+  trabajadores(Legajo, Nombre, Apellido, domicio(_, _, CodigoLocalidad), CodigoArea, _),
+  localidad(CodigoLocalidad, Localidad)
   area(CodigoArea, Area).
+
+salarios(Legajo, Salario) :-
+  trabajadores_y_su_salario(Legajo, SalarioBasico),
+
+  (trabajador(Legajo, _, _, _, _, contratado(_, _, _)),
+  Salario is SalarioBasico)
+  ; (trabajador(Legajo, _, _, domicilio(_, _, CodigoLocalidad), _, efectivo(_, _, _)),
+    ((localidad(CodigoLocalidad, 'Cordoba'),
+      Salario is SalarioBasico));
+    Salario is SalarioBasico + 250).
