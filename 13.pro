@@ -63,11 +63,11 @@ trabajadores_con_viaticos(Legajo, Nombre, Apellido, Localidad, Area) :-
   area(CodigoArea, Area).
 
 salarios(Legajo, Salario) :-
-  trabajadores_y_su_salario(Legajo, SalarioBasico),
-  ((trabajador(Legajo, _, _, _, _, contratado(_, _, _))
-  ; (trabajadores_que_no_son_de_cordoba(Legajo, _, _, _, _))),
-  Salario is SalarioBasico)
-  ; Salario is SalarioBasico + 250.
+  trabajadores_y_su_salario(Legajo, SB),
+  (((trabajador(Legajo, _, _, _, _, contratado(_,_,_))
+    ; trabajadores_que_no_son_de_cordoba(Legajo, _, _, _, _) ),
+    Salario is SB)
+  ; Salario is SB + 250).
 
 salario_inferior_a(Valor, Legajo, Apellido, Nombre, Area, Localidad) :-
   salarios(Legajo, Salario),
