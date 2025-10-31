@@ -1,5 +1,3 @@
-import Distribution.Compat.CharParsing (between)
-
 montoFinal :: (Integral a) => a -> Double -> Double
 montoFinal 1 montoBase = montoBase * ((100 - 3) / 100)
 montoFinal 2 montoBase = montoBase * ((100 - 5) / 100)
@@ -39,3 +37,6 @@ largo (x : xs) = 1 + largo xs
 
 porcentaje :: Integer -> Double
 porcentaje p = fromIntegral (suma lista p) / largo lista
+
+funcion11 x
+  | x == 'A' = '9'
